@@ -38,7 +38,7 @@ namespace TcpSocket.Client
             {
                 await theClient.Send(Guid.NewGuid().ToString());
 
-                await Task.Delay(6000);
+                await Task.Delay(1000);
             }
         }
     }
