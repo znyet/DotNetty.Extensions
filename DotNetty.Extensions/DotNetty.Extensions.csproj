@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E20FF9C2-FD95-4D63-A5CE-210FA3E1F62A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DotNetty.Extensions</RootNamespace>
+    <AssemblyName>DotNetty.Extensions</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DotNetty">
+      <HintPath>..\Lib\DotNetty.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Base\BaseTcpSocketClient.cs" />
+    <Compile Include="Base\BaseTcpSocketConnection.cs" />
+    <Compile Include="Base\BaseTcpSocketServer.cs" />
+    <Compile Include="Base\CommonChannelHandler.cs" />
+    <Compile Include="Base\IBaseSocketConnection.cs" />
+    <Compile Include="Base\IBaseTcpSocketClient.cs" />
+    <Compile Include="Base\IBaseTcpSocketServer.cs" />
+    <Compile Include="Base\IChannelEvent.cs" />
+    <Compile Include="Base\IClose.cs" />
+    <Compile Include="Base\ISendBytes.cs" />
+    <Compile Include="Base\ISendString.cs" />
+    <Compile Include="Base\TcpSocketCientEvent.cs" />
+    <Compile Include="Base\TcpSocketServerEvent.cs" />
+    <Compile Include="Builder\BaseBuilder.cs" />
+    <Compile Include="Builder\BaseGenericClientBuilder.cs" />
+    <Compile Include="Builder\BaseGenericServerBuilder.cs" />
+    <Compile Include="Builder\IBuilder.cs" />
+    <Compile Include="Builder\ICoderBuilder.cs" />
+    <Compile Include="Builder\IGenericClientBuilder.cs" />
+    <Compile Include="Builder\IGenericServerBuilder.cs" />
+    <Compile Include="Builder\ITcpSocketClientBuilder.cs" />
+    <Compile Include="Builder\ITcpSocketServerBuilder.cs" />
+    <Compile Include="Builder\IUdpSocketBuilder.cs" />
+    <Compile Include="Builder\IWebSocketClientBuilder.cs" />
+    <Compile Include="Builder\IWebSocketServerBuilder.cs" />
+    <Compile Include="Builder\TcpSocketClientBuilder.cs" />
+    <Compile Include="Builder\TcpSocketServerBuilder.cs" />
+    <Compile Include="Builder\UdpSocketBuilder.cs" />
+    <Compile Include="Builder\WebSocketClientBuilder.cs" />
+    <Compile Include="Builder\WebSocketServerBuilder.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SocketBuilderFactory.cs" />
+    <Compile Include="TcpSocket\ITcpSocketClient.cs" />
+    <Compile Include="TcpSocket\ITcpSocketConnection.cs" />
+    <Compile Include="TcpSocket\ITcpSocketServer.cs" />
+    <Compile Include="TcpSocket\TcpSocketClient.cs" />
+    <Compile Include="TcpSocket\TcpSocketConnection.cs" />
+    <Compile Include="TcpSocket\TcpSocketServer.cs" />
+    <Compile Include="UdpSocket\IUdpSocket.cs" />
+    <Compile Include="UdpSocket\UdpSocket.cs" />
+    <Compile Include="UdpSocket\UdpSocketEvent.cs" />
+    <Compile Include="Util\Extention.cs" />
+    <Compile Include="WebSocket\IWebSocketClient.cs" />
+    <Compile Include="WebSocket\IWebSocketConnection.cs" />
+    <Compile Include="WebSocket\IWebSocketServer.cs" />
+    <Compile Include="WebSocket\WebSocketClient.cs" />
+    <Compile Include="WebSocket\WebSocketConnection.cs" />
+    <Compile Include="WebSocket\WebSocketServer.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
