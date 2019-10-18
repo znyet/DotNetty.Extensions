@@ -3,6 +3,7 @@ using DotNetty.Codecs.Http;
 using DotNetty.Codecs.Http.WebSockets;
 using DotNetty.Common.Utilities;
 using DotNetty.Transport.Channels;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,13 +11,17 @@ namespace DotNetty.Extensions
 {
     class WebSocketServer : BaseTcpSocketServer<IWebSocketServer, IWebSocketConnection, string>, IWebSocketServer
     {
-        public WebSocketServer(int port, string path, TcpSocketServerEvent<IWebSocketServer, IWebSocketConnection, string> eventHandle)
+        public WebSocketServer(int port, string path, TcpSocketServerEvent<IWebSocketServer, IWebSocketConnection, string> eventHandle, X509Certificate2 cert)
             : base(port, eventHandle)
         {
             _path = path;
+            _cert = cert;
         }
 
         protected string _path { get; }
+
+        protected X509Certificate2 _cert { get; }
+
         protected override IWebSocketConnection BuildConnection(IChannel clientChannel)
         {
             return new WebSocketConnection(this, clientChannel, _eventHandle);
@@ -127,7 +132,9 @@ namespace DotNetty.Extensions
         {
             _ = req.Headers.TryGet(HttpHeaderNames.Host, out ICharSequence value);
             string location = value.ToString() + _path;
-            return "ws://" + location;
+            if (_cert == null)
+                return "ws://" + location;
+            return "wss://" + location;
         }
     }
 }

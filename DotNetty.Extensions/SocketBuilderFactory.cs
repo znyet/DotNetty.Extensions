@@ -1,4 +1,6 @@
-﻿namespace DotNetty.Extensions
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace DotNetty.Extensions
 {
     /// <summary>
     /// Socket构建者工厂
@@ -11,9 +13,9 @@
         /// <param name="ip">服务器Ip</param>
         /// <param name="port">服务器端口</param>
         /// <returns></returns>
-        public static ITcpSocketClientBuilder GetTcpSocketClientBuilder(string ip, int port, int idle = 0)
+        public static ITcpSocketClientBuilder GetTcpSocketClientBuilder(string ip, int port, int idle = 0, X509Certificate2 cert = null)
         {
-            return new TcpSocketClientBuilder(ip, port, idle);
+            return new TcpSocketClientBuilder(ip, port, idle, cert);
         }
 
         /// <summary>
@@ -21,9 +23,9 @@
         /// </summary>
         /// <param name="port">监听端口</param>
         /// <returns></returns>
-        public static ITcpSocketServerBuilder GetTcpSocketServerBuilder(int port, int idle = 0)
+        public static ITcpSocketServerBuilder GetTcpSocketServerBuilder(int port, int idle = 0, X509Certificate2 cert = null)
         {
-            return new TcpSocketServerBuilder(port, idle);
+            return new TcpSocketServerBuilder(port, idle, cert);
         }
 
         /// <summary>
@@ -32,9 +34,9 @@
         /// <param name="port">监听端口</param>
         /// <param name="path">路径,默认为"/"</param>
         /// <returns></returns>
-        public static IWebSocketServerBuilder GetWebSocketServerBuilder(int port, string path = "/", int idle = 0)
+        public static IWebSocketServerBuilder GetWebSocketServerBuilder(int port, string path = "/", int idle = 0, X509Certificate2 cert = null)
         {
-            return new WebSocketServerBuilder(port, path, idle);
+            return new WebSocketServerBuilder(port, path, idle, cert);
         }
 
         /// <summary>
@@ -44,9 +46,9 @@
         /// <param name="port">服务器端口</param>
         /// <param name="path">路径,默认为"/"</param>
         /// <returns></returns>
-        public static IWebSocketClientBuilder GetWebSocketClientBuilder(string ip, int port, string path = "/", int idle = 0)
+        public static IWebSocketClientBuilder GetWebSocketClientBuilder(string ip, int port, string path = "/", int idle = 0, X509Certificate2 cert = null)
         {
-            return new WebSocketClientBuilder(ip, port, path, idle);
+            return new WebSocketClientBuilder(ip, port, path, idle, cert);
         }
 
         /// <summary>

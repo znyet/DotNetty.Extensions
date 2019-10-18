@@ -1,10 +1,12 @@
 ﻿using DotNetty.Buffers;
 using DotNetty.Codecs;
 using DotNetty.Handlers.Timeout;
+using DotNetty.Handlers.Tls;
 using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
 using System;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace DotNetty.Extensions
@@ -13,8 +15,8 @@ namespace DotNetty.Extensions
         BaseGenericServerBuilder<ITcpSocketServerBuilder, ITcpSocketServer, ITcpSocketConnection, byte[]>,
         ITcpSocketServerBuilder
     {
-        public TcpSocketServerBuilder(int port, int idle)
-            : base(port, idle)
+        public TcpSocketServerBuilder(int port, int idle, X509Certificate2 cert)
+            : base(port, idle, cert)
         {
         }
 
@@ -47,6 +49,10 @@ namespace DotNetty.Extensions
                 {
                     IChannelPipeline pipeline = channel.Pipeline;
                     _setEncoder?.Invoke(pipeline);
+                    if (_cert != null)
+                    {
+                        pipeline.AddLast(TlsHandler.Server(_cert));
+                    }
                     if (_idle != 0)
                     {
                         pipeline.AddLast(new IdleStateHandler(_idle, 0, 0));

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 
 namespace DotNetty.Extensions
 {
@@ -7,8 +8,8 @@ namespace DotNetty.Extensions
         IGenericClientBuilder<TBuilder, TTarget, TData>
         where TBuilder : class
     {
-        public BaseGenericClientBuilder(string ip, int port, int idle)
-            : base(port,idle)
+        public BaseGenericClientBuilder(string ip, int port, int idle, X509Certificate2 cert)
+            : base(port, idle, cert)
         {
             _ip = ip;
         }

@@ -5,13 +5,16 @@ using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
 using System.Threading.Tasks;
 using DotNetty.Handlers.Timeout;
+using System.Security.Cryptography.X509Certificates;
+using DotNetty.Handlers.Tls;
+using System.Net.Security;
 
 namespace DotNetty.Extensions
 {
     class WebSocketClientBuilder : BaseGenericClientBuilder<IWebSocketClientBuilder, IWebSocketClient, string>, IWebSocketClientBuilder
     {
-        public WebSocketClientBuilder(string ip, int port, string path, int idle)
-            : base(ip, port, idle)
+        public WebSocketClientBuilder(string ip, int port, string path, int idle, X509Certificate2 cert)
+            : base(ip, port, idle, cert)
         {
             _path = path;
         }
@@ -28,6 +31,11 @@ namespace DotNetty.Extensions
                 .Handler(new ActionChannelInitializer<IChannel>(channel =>
                 {
                     IChannelPipeline pipeline = channel.Pipeline;
+                    if (_cert != null)
+                    {
+                        var targetHost = _cert.GetNameInfo(X509NameType.DnsName, false);
+                        pipeline.AddLast(new TlsHandler(stream => new SslStream(stream, true, (sender, certificate, chain, errors) => true), new ClientTlsSettings(targetHost)));
+                    }
                     if (_idle != 0)
                     {
                         pipeline.AddLast(new IdleStateHandler(_idle, 0, 0));
