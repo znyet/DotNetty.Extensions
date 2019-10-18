@@ -8,6 +8,7 @@ namespace WebSocket.Server
     {
         static async Task Main(string[] args)
         {
+            //var cert = new X509Certificate2(Path.Combine(ExampleHelper.ProcessDirectory, "dotnetty.com.pfx"), "password");
             var theServer = await SocketBuilderFactory.GetWebSocketServerBuilder(6002)
                 .OnConnectionClose((server, connection) =>
                 {

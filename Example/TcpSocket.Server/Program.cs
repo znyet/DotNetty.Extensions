@@ -10,6 +10,7 @@ namespace TcpSocket.Server
     {
         static async Task Main(string[] args)
         {
+            //var cert = new X509Certificate2(Path.Combine(ExampleHelper.ProcessDirectory, "dotnetty.com.pfx"), "password");
             var theServer = await SocketBuilderFactory.GetTcpSocketServerBuilder(6001)
                 .SetLengthFieldEncoder(2)
                 .SetLengthFieldDecoder(ushort.MaxValue, 0, 2, 0, 2)

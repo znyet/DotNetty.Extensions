@@ -8,6 +8,7 @@ namespace WebSocket.ConsoleClient
     {
         static async Task Main(string[] args)
         {
+            //var cert = new X509Certificate2(Path.Combine(ExampleHelper.ProcessDirectory, "dotnetty.com.pfx"), "password");
             var theClient = await SocketBuilderFactory.GetWebSocketClientBuilder("127.0.0.1", 6002)
                 .OnClientStarted(client =>
                 {
