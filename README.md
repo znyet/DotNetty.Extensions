@@ -125,6 +125,9 @@ static void Main(string[] args)
     udp.OnStart(() =>
     {
         Console.WriteLine("UDP服务启动8888");
+        var endPiont = new IPEndPoint(IPAddress.Broadcast, 7777);
+        var bytes = Encoding.UTF8.GetBytes("您好");
+        udp.SendAsync(endPiont, bytes);
     });
 
     udp.OnRecieve((endPoint, bytes) =>
