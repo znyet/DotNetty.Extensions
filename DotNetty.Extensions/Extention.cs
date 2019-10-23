@@ -48,10 +48,11 @@ namespace DotNetty.Extensions
                 return ArrayExtensions.ZeroBytes;
             }
 
-            if (byteBuffer.HasArray)
-            {
-                return byteBuffer.Array.Slice(byteBuffer.ArrayOffset + byteBuffer.ReaderIndex, readableBytes);
-            }
+            //if (byteBuffer.HasArray)
+            //{
+            //    return byteBuffer.Array.Slice(byteBuffer.ArrayOffset + byteBuffer.ReaderIndex, readableBytes);
+
+            //}
 
             var bytes = new byte[readableBytes];
             byteBuffer.GetBytes(byteBuffer.ReaderIndex, bytes);
