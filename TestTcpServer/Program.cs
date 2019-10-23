@@ -21,7 +21,7 @@ namespace TestTcpServer
             server.OnPipeline(pipeline =>
             {
                 //心跳
-                //pipeline.AddLast(new IdleStateHandler(5, 0, 0));
+                pipeline.AddLast(new IdleStateHandler(60, 0, 0));
 
                 //编码解码器
                 //pipeline.AddLast(new LengthFieldPrepender(2));
