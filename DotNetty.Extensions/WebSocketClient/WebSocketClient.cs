@@ -26,6 +26,17 @@ namespace DotNetty.Extensions
 
         internal IChannel channel;
 
+        public bool Open
+        {
+            get
+            {
+                if (channel == null)
+                    return false;
+
+                return channel.Open;
+            }
+        }
+
         internal IChannel channelWork;
 
         internal WebSocketClientEvent _event = new WebSocketClientEvent();
