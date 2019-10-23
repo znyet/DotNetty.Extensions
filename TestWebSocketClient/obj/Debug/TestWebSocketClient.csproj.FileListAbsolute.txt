@@ -1,9 +1,0 @@
-F:\VS2019\DotNetty.Extensions\TestWebSocketClient\bin\Debug\TestWebSocketClient.exe.config
-F:\VS2019\DotNetty.Extensions\TestWebSocketClient\bin\Debug\TestWebSocketClient.exe
-F:\VS2019\DotNetty.Extensions\TestWebSocketClient\bin\Debug\TestWebSocketClient.pdb
-F:\VS2019\DotNetty.Extensions\TestWebSocketClient\bin\Debug\DotNetty.dll
-F:\VS2019\DotNetty.Extensions\TestWebSocketClient\bin\Debug\DotNetty.Extensions.dll
-F:\VS2019\DotNetty.Extensions\TestWebSocketClient\bin\Debug\DotNetty.Extensions.pdb
-F:\VS2019\DotNetty.Extensions\TestWebSocketClient\obj\Debug\TestWebSocketClient.csproj.CopyComplete
-F:\VS2019\DotNetty.Extensions\TestWebSocketClient\obj\Debug\TestWebSocketClient.exe
-F:\VS2019\DotNetty.Extensions\TestWebSocketClient\obj\Debug\TestWebSocketClient.pdb
