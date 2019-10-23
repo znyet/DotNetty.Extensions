@@ -101,8 +101,6 @@ namespace DotNetty.Extensions
                         pipeline.AddLast(new HttpObjectAggregator(65536));
                         pipeline.AddLast(new WebSocketServerHandler(this));
 
-
-
                     }));
             }
 
