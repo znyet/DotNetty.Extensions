@@ -1,0 +1,10 @@
+F:\VS2019\DotNetty.Extensions\TestWebSocketServer\bin\Debug\TestWebSocketServer.exe.config
+F:\VS2019\DotNetty.Extensions\TestWebSocketServer\bin\Debug\TestWebSocketServer.exe
+F:\VS2019\DotNetty.Extensions\TestWebSocketServer\bin\Debug\TestWebSocketServer.pdb
+F:\VS2019\DotNetty.Extensions\TestWebSocketServer\bin\Debug\DotNetty.dll
+F:\VS2019\DotNetty.Extensions\TestWebSocketServer\bin\Debug\DotNetty.Extensions.dll
+F:\VS2019\DotNetty.Extensions\TestWebSocketServer\bin\Debug\DotNetty.Extensions.pdb
+F:\VS2019\DotNetty.Extensions\TestWebSocketServer\obj\Debug\TestWebSocketServer.csproj.CopyComplete
+F:\VS2019\DotNetty.Extensions\TestWebSocketServer\obj\Debug\TestWebSocketServer.exe
+F:\VS2019\DotNetty.Extensions\TestWebSocketServer\obj\Debug\TestWebSocketServer.pdb
+F:\VS2019\DotNetty.Extensions\TestWebSocketServer\obj\Debug\TestWebSocketServer.csprojAssemblyReference.cache

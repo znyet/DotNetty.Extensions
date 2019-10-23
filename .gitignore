@@ -4,20 +4,20 @@
 DotNetty.Extensions/bin
 DotNetty.Extensions/obj
 
-Example/TcpSocket.Client/bin
-Example/TcpSocket.Client/obj
+Example/TestTcpClient/bin
+Example/TestTcpClient/obj
 
-Example/TcpSocket.Server/bin
-Example/TcpSocket.Server/obj
+Example/TestTcpServer/bin
+Example/TestTcpServer/obj
 
-Example/UdpSocket.Client/bin
-Example/UdpSocket.Client/obj
+Example/TestUdp1/bin
+Example/TestUdp1/obj
 
-Example/UdpSocket.Server/bin
-Example/UdpSocket.Server/obj
+Example/TestUdp2/bin
+Example/TestUdp2/obj
 
-Example/WebSocket.ConsoleClient/bin
-Example/WebSocket.ConsoleClient/obj
+Example/TestWebSocketClient/bin
+Example/TestWebSocketClient/obj
 
-Example/WebSocket.Server/bin
-Example/WebSocket.Server/obj
+Example/TestWebSocketServer/bin
+Example/TestWebSocketServer/obj

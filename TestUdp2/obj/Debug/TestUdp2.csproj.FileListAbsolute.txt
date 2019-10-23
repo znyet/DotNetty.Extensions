@@ -1,0 +1,10 @@
+F:\VS2019\DotNetty.Extensions\TestUdp2\bin\Debug\TestUdp2.exe.config
+F:\VS2019\DotNetty.Extensions\TestUdp2\bin\Debug\TestUdp2.exe
+F:\VS2019\DotNetty.Extensions\TestUdp2\bin\Debug\TestUdp2.pdb
+F:\VS2019\DotNetty.Extensions\TestUdp2\bin\Debug\DotNetty.Extensions.dll
+F:\VS2019\DotNetty.Extensions\TestUdp2\bin\Debug\DotNetty.dll
+F:\VS2019\DotNetty.Extensions\TestUdp2\bin\Debug\DotNetty.Extensions.pdb
+F:\VS2019\DotNetty.Extensions\TestUdp2\obj\Debug\TestUdp2.csproj.CopyComplete
+F:\VS2019\DotNetty.Extensions\TestUdp2\obj\Debug\TestUdp2.exe
+F:\VS2019\DotNetty.Extensions\TestUdp2\obj\Debug\TestUdp2.pdb
+F:\VS2019\DotNetty.Extensions\TestUdp2\obj\Debug\TestUdp2.csprojAssemblyReference.cache

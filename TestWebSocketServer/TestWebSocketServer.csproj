@@ -4,16 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AD38C081-77AB-4552-80D2-A2B35B7EDBE1}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DotNetty.Extensions</RootNamespace>
-    <AssemblyName>DotNetty.Extensions</AssemblyName>
+    <ProjectGuid>{FF277A22-2B99-43CF-A6CC-7E8D4D7A1664}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>TestWebSocketServer</RootNamespace>
+    <AssemblyName>TestWebSocketServer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -44,26 +45,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extention.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TcpSocketClient\TcpClientHandler.cs" />
-    <Compile Include="TcpSocketClient\TcpClientEvent.cs" />
-    <Compile Include="TcpSocketServer\TcpServerHandler.cs" />
-    <Compile Include="TcpSocketServer\TcpServerEvent.cs" />
-    <Compile Include="TcpSocketClient\TcpSocketClient.cs" />
-    <Compile Include="TcpSocketServer\TcpSocketConnection.cs" />
-    <Compile Include="TcpSocketServer\TcpSocketServer.cs" />
-    <Compile Include="UdpSocket\UdpHandler.cs" />
-    <Compile Include="UdpSocket\UdpEvent.cs" />
-    <Compile Include="UdpSocket\UdpSocket.cs" />
-    <Compile Include="WebSocketClient\WebSocketClientEvent.cs" />
-    <Compile Include="WebSocketClient\WebSocketClientHandler.cs" />
-    <Compile Include="WebSocketClient\WebSocketClient.cs" />
-    <Compile Include="WebSocketServer\WebSocketServerEvent.cs" />
-    <Compile Include="WebSocketServer\WebSocketConnection.cs" />
-    <Compile Include="WebSocketServer\WebSocketServer.cs" />
-    <Compile Include="WebSocketServer\WebSocketServerHandler.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DotNetty.Extensions\DotNetty.Extensions.csproj">
+      <Project>{ad38c081-77ab-4552-80d2-a2b35b7edbe1}</Project>
+      <Name>DotNetty.Extensions</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

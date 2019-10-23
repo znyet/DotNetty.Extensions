@@ -1,83 +1,131 @@
 ﻿using DotNetty.Buffers;
+using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
 using System;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DotNetty.Extensions
 {
-    class UdpSocket : IUdpSocket, IChannelEvent
+    public class UdpSocket
     {
-        public UdpSocket(int port, UdpSocketEvent socketEvent)
-        {
-            Port = port;
-            _event = socketEvent;
-        }
-        UdpSocketEvent _event { get; }
-        public int Port { get; }
-        private IChannel _channel { get; set; }
+        private int _port;
 
-        public void Close()
+        private IPAddress _ipAddress;
+
+        public UdpSocket(int port = 0, IPAddress ipAddress = null)
         {
-            throw new NotImplementedException();
+            _port = port;
+            _ipAddress = ipAddress;
         }
 
-        public void SetChannel(IChannel channel)
-        {
-            _channel = channel;
-        }
+        private IEventLoopGroup group;
 
-        public void OnChannelActive(IChannelHandlerContext ctx)
-        {
-            _event.OnStarted?.Invoke(this);
-        }
+        private Bootstrap bootstrap;
 
-        public void OnChannelInactive(IChannel channel)
-        {
-            _event.OnClose?.Invoke(this);
-        }
+        private IChannel channel;
 
-        public void OnChannelReceive(IChannelHandlerContext ctx, object msg)
+        private UdpEvent _event = new UdpEvent();
+
+        public async Task StartAsync()
         {
-            DatagramPacket packet = msg as DatagramPacket;
-            if (!packet.Content.IsReadable())
+            if (group == null)
+                group = new MultithreadEventLoopGroup();
+
+            if (bootstrap == null)
             {
-                return;
+                bootstrap = new Bootstrap();
+                bootstrap
+                    .Group(group)
+                    .Channel<SocketDatagramChannel>()
+                    .Option(ChannelOption.SoBroadcast, true)
+                    .Handler(new ActionChannelInitializer<IChannel>(ch =>
+                    {
+                        IChannelPipeline pipeline = ch.Pipeline;
+                        _event.OnPipelineAction?.Invoke(pipeline);
+                        pipeline.AddLast(new UdpHandler(_event));
+                    }));
             }
-            else
+
+            if (_ipAddress == null)
             {
-                var bytes = packet.Content.ToArray();
-                _event.OnRecieve?.Invoke(this, packet.Sender, bytes);
+                _ipAddress = IPAddress.Any;
             }
-        }
 
-        public void OnException(IChannel channel, Exception exception)
-        {
-            _event.OnException?.Invoke(exception);
-        }
+            await Stop();
 
-        public async Task Send(byte[] bytes, EndPoint point)
-        {
             try
             {
-                IByteBuffer buffer = Unpooled.WrappedBuffer(bytes);
-                await _channel.WriteAndFlushAsync(new DatagramPacket(buffer, point));
-                await Task.Run(() =>
-                {
-                    _event.OnSend?.Invoke(this, point, bytes);
-                });
+                channel = await bootstrap.BindAsync(_ipAddress, _port);
+                _event.OnStartAction?.Invoke();
             }
             catch (Exception ex)
             {
-                _event.OnException.Invoke(ex);
+                _event.OnStopAction?.Invoke(ex);
             }
         }
 
-        public async Task Send(string msgStr, EndPoint point)
+        private async Task Stop()
         {
-            await Send(Encoding.UTF8.GetBytes(msgStr), point);
+            if (channel != null)
+            {
+                await channel.CloseAsync();
+            }
+
         }
+
+        public async Task StopAsync()
+        {
+            await Stop();
+            _event.OnStopAction?.Invoke(new Exception("StopAsync"));
+        }
+
+        public async Task ShutdownAsync()
+        {
+            await Stop();
+
+            if (group != null)
+            {
+                await group.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1));
+            }
+
+            group = null;
+            bootstrap = null;
+            _event.OnStopAction?.Invoke(new Exception("ShutdownAsync"));
+        }
+
+        public async Task SendAsync(EndPoint endPoint, byte[] bytes)
+        {
+            var buffer = Unpooled.WrappedBuffer(bytes);
+            var dp = new DatagramPacket(buffer, endPoint);
+            await channel.WriteAndFlushAsync(dp);
+        }
+
+        public void OnPipeline(Action<IChannelPipeline> action)
+        {
+            _event.OnPipelineAction = action;
+        }
+
+        public void OnStart(Action action)
+        {
+            _event.OnStartAction = action;
+        }
+
+        public void OnRecieve(Action<EndPoint, byte[]> action)
+        {
+            _event.OnRecieveAction = action;
+        }
+
+        public void OnException(Action<Exception> action)
+        {
+            _event.OnExceptionAction = action;
+        }
+
+        public void OnStop(Action<Exception> action)
+        {
+            _event.OnStopAction = action;
+        }
+
     }
 }
