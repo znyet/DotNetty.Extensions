@@ -85,6 +85,7 @@ namespace DotNetty.Extensions
 
         public override void ExceptionCaught(IChannelHandlerContext context, Exception exception)
         {
+            //completionSource.TrySetException(exception);
             _client._event.OnExceptionAction?.Invoke(exception);
         }
 
