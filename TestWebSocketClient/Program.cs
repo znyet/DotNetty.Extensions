@@ -56,7 +56,7 @@ namespace TestWebSocketClient
             {
                 Console.WriteLine("OnClose:" + ex);
                 //restart
-                client.ConnectAsync();
+                //client.ConnectAsync();
             });
 
             client.ConnectAsync();
