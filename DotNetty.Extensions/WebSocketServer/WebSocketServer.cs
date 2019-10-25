@@ -46,7 +46,7 @@ namespace DotNetty.Extensions
 
         internal WebSocketServerEvent _event = new WebSocketServerEvent();
 
-        internal ConcurrentDictionary<string, WebSocketConnection> connectionDict = new ConcurrentDictionary<string, WebSocketConnection>();
+        internal readonly ConcurrentDictionary<string, WebSocketConnection> connectionDict = new ConcurrentDictionary<string, WebSocketConnection>();
 
         public async Task StartAsync()
         {

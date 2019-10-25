@@ -38,17 +38,12 @@ namespace DotNetty.Extensions
 
         public string Name { get; set; }
 
-        private ConcurrentDictionary<object, object> _dict;
+        private readonly ConcurrentDictionary<object, object> _dict = new ConcurrentDictionary<object, object>();
 
         public IDictionary<object, object> SessionItems
         {
             get
             {
-                if (_dict == null)
-                {
-                    _dict = new ConcurrentDictionary<object, object>();
-                }
-
                 return _dict;
             }
         }

@@ -39,7 +39,7 @@ namespace DotNetty.Extensions
 
         private TcpServerEvent _event = new TcpServerEvent();
 
-        private ConcurrentDictionary<string, TcpSocketConnection> connectionDict = new ConcurrentDictionary<string, TcpSocketConnection>();
+        private readonly ConcurrentDictionary<string, TcpSocketConnection> connectionDict = new ConcurrentDictionary<string, TcpSocketConnection>();
 
         public async Task StartAsync()
         {
