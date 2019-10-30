@@ -91,7 +91,7 @@ namespace DotNetty.Extensions
 
         public override void ChannelInactive(IChannelHandlerContext context)
         {
-            _client._event.OnCloseAction.Invoke(new Exception("ChannelInactive"));
+            _client._event.OnCloseAction?.Invoke(new Exception("ChannelInactive"));
         }
 
         public override void UserEventTriggered(IChannelHandlerContext context, object evt)
