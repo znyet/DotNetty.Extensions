@@ -5,6 +5,7 @@ using DotNetty.Codecs.Http.WebSockets.Extensions.Compression;
 using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
+using DotNetty.Transport.Libuv;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -13,10 +14,13 @@ namespace DotNetty.Extensions
 {
     public class WebSocketClient
     {
-        public WebSocketClient(string uri)
+        public WebSocketClient(string uri, bool useLibuv = false)
         {
             builder = new UriBuilder(uri);
+            _useLibuv = useLibuv;
         }
+
+        private bool _useLibuv;
 
         private UriBuilder builder;
 
@@ -43,34 +47,49 @@ namespace DotNetty.Extensions
 
         public async Task ConnectAsync()
         {
-            if (group == null)
-            {
-                group = new MultithreadEventLoopGroup();
-            }
-
-            if (bootstrap == null)
-            {
-                bootstrap = new Bootstrap();
-                bootstrap
-                    .Group(group)
-                    .Channel<TcpSocketChannel>()
-                    .Option(ChannelOption.TcpNodelay, true)
-                    .Handler(new ActionChannelInitializer<IChannel>(ch =>
-                    {
-                        IChannelPipeline pipeline = ch.Pipeline;
-                        _event.OnPipelineAction?.Invoke(pipeline);
-                        pipeline.AddLast(new HttpClientCodec());
-                        pipeline.AddLast(new HttpObjectAggregator(8192));
-                        pipeline.AddLast(WebSocketClientCompressionHandler.Instance);
-                        pipeline.AddLast(new WebSocketClientHandler(this, WebSocketClientHandshakerFactory.NewHandshaker(builder.Uri, WebSocketVersion.V13, null, true, new DefaultHttpHeaders())));
-                    }));
-
-            }
-
-            await Close();
-
             try
             {
+                if (group == null)
+                {
+                    if (_useLibuv)
+                    {
+                        group = new EventLoopGroup();
+                    }
+                    else
+                    {
+                        group = new MultithreadEventLoopGroup();
+                    }
+                }
+
+                if (bootstrap == null)
+                {
+                    bootstrap = new Bootstrap();
+                    bootstrap
+                        .Group(group)
+                        .Option(ChannelOption.TcpNodelay, true);
+
+                    if (_useLibuv)
+                    {
+                        bootstrap.Channel<TcpChannel>();
+                    }
+                    else
+                    {
+                        bootstrap.Channel<TcpSocketChannel>();
+                    }
+
+                    bootstrap.Handler(new ActionChannelInitializer<IChannel>(ch =>
+                        {
+                            IChannelPipeline pipeline = ch.Pipeline;
+                            _event.OnPipelineAction?.Invoke(pipeline);
+                            pipeline.AddLast(new HttpClientCodec());
+                            pipeline.AddLast(new HttpObjectAggregator(8192));
+                            pipeline.AddLast(WebSocketClientCompressionHandler.Instance);
+                            pipeline.AddLast(new WebSocketClientHandler(this, WebSocketClientHandshakerFactory.NewHandshaker(builder.Uri, WebSocketVersion.V13, null, true, new DefaultHttpHeaders())));
+                        }));
+                }
+
+                await Close();
+
                 channelWork = await bootstrap.ConnectAsync(IPAddress.Parse(builder.Host), builder.Port);
             }
             catch (Exception ex)

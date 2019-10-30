@@ -30,33 +30,34 @@ namespace DotNetty.Extensions
 
         public async Task StartAsync()
         {
-            if (group == null)
-                group = new MultithreadEventLoopGroup();
-
-            if (bootstrap == null)
-            {
-                bootstrap = new Bootstrap();
-                bootstrap
-                    .Group(group)
-                    .Channel<SocketDatagramChannel>()
-                    .Option(ChannelOption.SoBroadcast, true)
-                    .Handler(new ActionChannelInitializer<IChannel>(ch =>
-                    {
-                        IChannelPipeline pipeline = ch.Pipeline;
-                        _event.OnPipelineAction?.Invoke(pipeline);
-                        pipeline.AddLast(new UdpHandler(_event));
-                    }));
-            }
-
-            if (_ipAddress == null)
-            {
-                _ipAddress = IPAddress.Any;
-            }
-
-            await Stop();
-
             try
             {
+                if (group == null)
+                    group = new MultithreadEventLoopGroup();
+
+                if (bootstrap == null)
+                {
+                    bootstrap = new Bootstrap();
+                    bootstrap
+                        .Group(group)
+                        .Channel<SocketDatagramChannel>()
+                        .Option(ChannelOption.SoBroadcast, true)
+                        .Handler(new ActionChannelInitializer<IChannel>(ch =>
+                        {
+                            IChannelPipeline pipeline = ch.Pipeline;
+                            _event.OnPipelineAction?.Invoke(pipeline);
+                            pipeline.AddLast(new UdpHandler(_event));
+                        }));
+                }
+
+                if (_ipAddress == null)
+                {
+                    _ipAddress = IPAddress.Any;
+                }
+
+                await Stop();
+
+
                 channel = await bootstrap.BindAsync(_ipAddress, _port);
                 _event.OnStartAction?.Invoke();
             }

@@ -15,7 +15,7 @@ namespace TestWebSocketServer
     {
         static void Main(string[] args)
         {
-            var server = new WebSocketServer(8888);
+            var server = new WebSocketServer(8888, useLibuv: true);
 
             server.OnPipeline(pipeline =>
             {

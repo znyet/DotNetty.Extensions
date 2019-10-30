@@ -50,69 +50,70 @@ namespace DotNetty.Extensions
 
         public async Task StartAsync()
         {
-            if (bossGroup == null && workerGroup == null)
-            {
-                if (_useLibuv)
-                {
-                    var dispatcher = new DispatcherEventLoopGroup();
-                    bossGroup = dispatcher;
-                    workerGroup = new WorkerEventLoopGroup(dispatcher);
-                }
-                else
-                {
-                    bossGroup = new MultithreadEventLoopGroup();
-                    workerGroup = new MultithreadEventLoopGroup();
-                }
-            }
-
-            if (bootstrap == null)
-            {
-                bootstrap = new ServerBootstrap();
-                bootstrap.Group(bossGroup, workerGroup);
-
-                if (_useLibuv)
-                {
-                    bootstrap.Channel<TcpServerChannel>();
-                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
-                        || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                    {
-                        bootstrap
-                            .Option(ChannelOption.SoReuseport, true)
-                            .ChildOption(ChannelOption.SoReuseaddr, true);
-                    }
-                }
-                else
-                {
-                    bootstrap.Channel<TcpServerSocketChannel>();
-                }
-
-                bootstrap
-                    .Option(ChannelOption.SoBacklog, 8192)
-                    .ChildHandler(new ActionChannelInitializer<IChannel>(ch =>
-                    {
-                        IChannelPipeline pipeline = ch.Pipeline;
-                        _event.OnPipelineAction?.Invoke(pipeline);
-                        var tls = pipeline.FirstOrDefault(f => f.GetType() == typeof(TlsHandler));
-                        if (tls != null)
-                        {
-                            _useSsl = true;
-                        }
-                        pipeline.AddLast(new HttpServerCodec());
-                        pipeline.AddLast(new HttpObjectAggregator(65536));
-                        pipeline.AddLast(new WebSocketServerHandler(this));
-
-                    }));
-            }
-
-            if (_ipAddress == null)
-            {
-                _ipAddress = IPAddress.Any;
-            }
-
-            await Stop();
-
             try
             {
+                if (bossGroup == null && workerGroup == null)
+                {
+                    if (_useLibuv)
+                    {
+                        var dispatcher = new DispatcherEventLoopGroup();
+                        bossGroup = dispatcher;
+                        workerGroup = new WorkerEventLoopGroup(dispatcher);
+                    }
+                    else
+                    {
+                        bossGroup = new MultithreadEventLoopGroup();
+                        workerGroup = new MultithreadEventLoopGroup();
+                    }
+                }
+
+                if (bootstrap == null)
+                {
+                    bootstrap = new ServerBootstrap();
+                    bootstrap.Group(bossGroup, workerGroup);
+
+                    if (_useLibuv)
+                    {
+                        bootstrap.Channel<TcpServerChannel>();
+                        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
+                            || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                        {
+                            bootstrap
+                                .Option(ChannelOption.SoReuseport, true)
+                                .ChildOption(ChannelOption.SoReuseaddr, true);
+                        }
+                    }
+                    else
+                    {
+                        bootstrap.Channel<TcpServerSocketChannel>();
+                    }
+
+                    bootstrap
+                        .Option(ChannelOption.SoBacklog, 8192)
+                        .ChildHandler(new ActionChannelInitializer<IChannel>(ch =>
+                        {
+                            IChannelPipeline pipeline = ch.Pipeline;
+                            _event.OnPipelineAction?.Invoke(pipeline);
+                            var tls = pipeline.FirstOrDefault(f => f.GetType() == typeof(TlsHandler));
+                            if (tls != null)
+                            {
+                                _useSsl = true;
+                            }
+                            pipeline.AddLast(new HttpServerCodec());
+                            pipeline.AddLast(new HttpObjectAggregator(65536));
+                            pipeline.AddLast(new WebSocketServerHandler(this));
+
+                        }));
+                }
+
+                if (_ipAddress == null)
+                {
+                    _ipAddress = IPAddress.Any;
+                }
+
+                await Stop();
+
+
                 channel = await bootstrap.BindAsync(_ipAddress, _port);
                 _event.OnStartAction?.Invoke();
             }

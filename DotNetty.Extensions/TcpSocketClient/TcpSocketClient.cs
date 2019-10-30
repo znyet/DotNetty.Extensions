@@ -43,31 +43,31 @@ namespace DotNetty.Extensions
 
         public async Task ConnectAsync()
         {
-            if (group == null)
-            {
-                group = new MultithreadEventLoopGroup();
-            }
-
-            if (bootstrap == null)
-            {
-                bootstrap = new Bootstrap();
-                bootstrap
-                    .Group(group)
-                    .Channel<TcpSocketChannel>()
-                    .Option(ChannelOption.TcpNodelay, true)
-                    .Handler(new ActionChannelInitializer<ISocketChannel>(ch =>
-                    {
-                        IChannelPipeline pipeline = ch.Pipeline;
-                        _event.OnPipelineAction?.Invoke(pipeline);
-                        pipeline.AddLast(new TcpClientHandler(this));
-
-                    }));
-            }
-
-            await Close();
-
             try
             {
+                if (group == null)
+                {
+                    group = new MultithreadEventLoopGroup();
+                }
+
+                if (bootstrap == null)
+                {
+                    bootstrap = new Bootstrap();
+                    bootstrap
+                        .Group(group)
+                        .Channel<TcpSocketChannel>()
+                        .Option(ChannelOption.TcpNodelay, true)
+                        .Handler(new ActionChannelInitializer<ISocketChannel>(ch =>
+                        {
+                            IChannelPipeline pipeline = ch.Pipeline;
+                            _event.OnPipelineAction?.Invoke(pipeline);
+                            pipeline.AddLast(new TcpClientHandler(this));
+
+                        }));
+                }
+
+                await Close();
+
                 channelWork = await bootstrap.ConnectAsync(IPAddress.Parse(_serverIp), _serverPort);
             }
             catch (Exception ex)

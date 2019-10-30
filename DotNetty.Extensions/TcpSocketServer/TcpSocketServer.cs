@@ -43,54 +43,55 @@ namespace DotNetty.Extensions
 
         public async Task StartAsync()
         {
-            if (bossGroup == null && workerGroup == null)
-            {
-                if (_useLibuv)
-                {
-                    var dispatcher = new DispatcherEventLoopGroup();
-                    bossGroup = dispatcher;
-                    workerGroup = new WorkerEventLoopGroup(dispatcher);
-                }
-                else
-                {
-                    bossGroup = new MultithreadEventLoopGroup();
-                    workerGroup = new MultithreadEventLoopGroup();
-                }
-            }
-
-            if (bootstrap == null)
-            {
-                bootstrap = new ServerBootstrap();
-                bootstrap.Group(bossGroup, workerGroup);
-                if (_useLibuv)
-                {
-                    bootstrap.Channel<TcpServerChannel>();
-                }
-                else
-                {
-                    bootstrap.Channel<TcpServerSocketChannel>();
-                }
-
-                bootstrap
-                    .Option(ChannelOption.SoBacklog, _soBacklog)
-                    .ChildHandler(new ActionChannelInitializer<IChannel>(ch =>
-                    {
-                        IChannelPipeline pipeline = ch.Pipeline;
-                        _event.OnPipelineAction?.Invoke(pipeline);
-                        pipeline.AddLast(new TcpServerHandler(_event, connectionDict));
-
-                    }));
-            }
-
-            if (_ipAddress == null)
-            {
-                _ipAddress = IPAddress.Any;
-            }
-
-            await Stop();
-
             try
             {
+                if (bossGroup == null && workerGroup == null)
+                {
+                    if (_useLibuv)
+                    {
+                        var dispatcher = new DispatcherEventLoopGroup();
+                        bossGroup = dispatcher;
+                        workerGroup = new WorkerEventLoopGroup(dispatcher);
+                    }
+                    else
+                    {
+                        bossGroup = new MultithreadEventLoopGroup();
+                        workerGroup = new MultithreadEventLoopGroup();
+                    }
+                }
+
+                if (bootstrap == null)
+                {
+                    bootstrap = new ServerBootstrap();
+                    bootstrap.Group(bossGroup, workerGroup);
+                    if (_useLibuv)
+                    {
+                        bootstrap.Channel<TcpServerChannel>();
+                    }
+                    else
+                    {
+                        bootstrap.Channel<TcpServerSocketChannel>();
+                    }
+
+                    bootstrap
+                        .Option(ChannelOption.SoBacklog, _soBacklog)
+                        .ChildHandler(new ActionChannelInitializer<IChannel>(ch =>
+                        {
+                            IChannelPipeline pipeline = ch.Pipeline;
+                            _event.OnPipelineAction?.Invoke(pipeline);
+                            pipeline.AddLast(new TcpServerHandler(_event, connectionDict));
+
+                        }));
+                }
+
+                if (_ipAddress == null)
+                {
+                    _ipAddress = IPAddress.Any;
+                }
+
+                await Stop();
+
+
                 channel = await bootstrap.BindAsync(_ipAddress, _port);
                 _event.OnStartAction?.Invoke();
             }

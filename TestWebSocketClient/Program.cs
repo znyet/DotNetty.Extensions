@@ -14,7 +14,7 @@ namespace TestWebSocketClient
     {
         static void Main(string[] args)
         {
-            var client = new WebSocketClient("ws://127.0.0.1:8888");
+            var client = new WebSocketClient("ws://127.0.0.1:8888",true);
 
             client.OnPipeline(pipeline =>
             {
