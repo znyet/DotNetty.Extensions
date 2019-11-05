@@ -81,11 +81,13 @@ namespace DotNetty.Extensions
             if (channelWork != null)
             {
                 await channelWork.CloseAsync();
+                channelWork = null;
             }
 
             if (channel != null)
             {
                 await channel.CloseAsync();
+                channel = null;
             }
 
         }

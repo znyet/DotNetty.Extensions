@@ -72,6 +72,7 @@ namespace DotNetty.Extensions
             if (channel != null)
             {
                 await channel.CloseAsync();
+                channel = null;
             }
 
         }

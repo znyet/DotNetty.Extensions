@@ -108,6 +108,7 @@ namespace DotNetty.Extensions
                 await channel.CloseAsync();
                 await Task.WhenAll(connectionDict.Values.Select(s => s.CloseAsync()).ToArray());
                 connectionDict.Clear();
+                channel = null;
             }
         }
 
