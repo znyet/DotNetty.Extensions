@@ -14,10 +14,13 @@ namespace DotNetty.Extensions
 
         private int _serverPort;
 
-        public TcpSocketClient(string serverIp, int serverPort)
+        private int _timeout;
+
+        public TcpSocketClient(string serverIp, int serverPort, int connectTimeout = 3)
         {
             _serverIp = serverIp;
             _serverPort = serverPort;
+            _timeout = connectTimeout;
         }
 
         private IEventLoopGroup group;
@@ -57,6 +60,7 @@ namespace DotNetty.Extensions
                         .Group(group)
                         .Channel<TcpSocketChannel>()
                         .Option(ChannelOption.TcpNodelay, true)
+                        .Option(ChannelOption.ConnectTimeout, TimeSpan.FromSeconds(_timeout))
                         .Handler(new ActionChannelInitializer<ISocketChannel>(ch =>
                         {
                             IChannelPipeline pipeline = ch.Pipeline;

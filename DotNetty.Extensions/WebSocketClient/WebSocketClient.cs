@@ -14,13 +14,16 @@ namespace DotNetty.Extensions
 {
     public class WebSocketClient
     {
-        public WebSocketClient(string uri, bool useLibuv = false)
+        public WebSocketClient(string uri, int connectTimeout = 3, bool useLibuv = false)
         {
             builder = new UriBuilder(uri);
             _useLibuv = useLibuv;
+            _timeout = connectTimeout;
         }
 
         private bool _useLibuv;
+
+        private int _timeout;
 
         private UriBuilder builder;
 
@@ -66,7 +69,8 @@ namespace DotNetty.Extensions
                     bootstrap = new Bootstrap();
                     bootstrap
                         .Group(group)
-                        .Option(ChannelOption.TcpNodelay, true);
+                        .Option(ChannelOption.TcpNodelay, true)
+                        .Option(ChannelOption.ConnectTimeout, TimeSpan.FromSeconds(_timeout));
 
                     if (_useLibuv)
                     {
